@@ -1,3 +1,7 @@
+[原文引自这里：](http://www.jianshu.com/p/a7a0330f30d0)
+
+全部转自作者的原文博客，主要是记录下来，学习思路，以后做到举一反三！谢谢原作者的付出！
+
 ## 爬取今日头条街拍图片
 
 > 本博客主要记录跟随崔庆才老师的分析Ajax抓取今日头条街拍美图学习的整个过程，更多精品文章，请参阅崔老师的博客，再次感谢崔老师教导。
@@ -109,8 +113,60 @@ from bs4 import BeautifulSoup
 返回一个数组，包括详情页面的标题，详情页面的url，图片的url数组
 
 ---
+## 存储到数据库
 
-[原文引自这里：](http://www.jianshu.com/p/a7a0330f30d0)
+- 下载安装mongoDB，这里不赘述  
+- 配置mongoDB，可以参见[我的博客](http://www.jianshu.com/p/f79b759988d3)  
+- pycharm配置mongoDB  
+
+创建config.py配置文件，然后配置一些参数，包括主机，数据库名，表名
+
+![image](http://upload-images.jianshu.io/upload_images/954728-441695093f1c791e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+创建数据库，主要利用pymongo(import pymongo)框架，因为研究的不是很彻底，这里只写一些简单的代码，不要忘记导入配置文件
+```
+from config import *
+```
+![image](http://upload-images.jianshu.io/upload_images/954728-4885239e18b3a43a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+存储数据
+
+![image](http://upload-images.jianshu.io/upload_images/954728-365a654d8a5573bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+---
+
+## 下载图片
+
+通过url下载图片数据，是Python相关知识，不赘述
+
+![image](http://upload-images.jianshu.io/upload_images/954728-17c7e77c81f2262c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+将图片数据转换为图片
+
+
+![image](http://upload-images.jianshu.io/upload_images/954728-cf415a9e4df65f31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+将以上代码整体串接调用
+
+```
+def main(offset):
+    html = get_page_index(offset, KEYWORD)
+    for url in parse_page_index(html):
+        detail = get_page_detail(url)
+        # 这里进行一下判断，如果能正常返回在进行解析
+        if detail and parse_page_detail(detail, url):
+            result = parse_page_detail(detail, url)
+            if result:
+                save_to_db(result)
+
+if __name__ == "__main__":
+       main()
+
+```
+
+
+
+
 
 
 
