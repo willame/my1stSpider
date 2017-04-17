@@ -23,13 +23,63 @@
 
 跟随视频学习，打开谷歌的工具查看索引页面的源代码，没有看到和素材相关的资源，这里略总结一下，以目前自己所学的这点知识，想要的链接信息主要存在于以下三方面的元素中
 
-> 存在于HTML的标签的链接中
-> 存在于CSS样式中
-> 存在于 页面的js代码中
-> 存在于ajax的请求中（索引页面就是这种）
+> 存在于HTML的标签的链接中  
+> 存在于CSS样式中  
+> 存在于 页面的js代码中  
+> 存在于ajax的请求中（索引页面就是这种）  
 
 - 索引页数据分析
 
 通过分析所以页面是通过ajax请求获取到的，通过Google浏览器的工具filter工具的XHR过滤项可以看出
 
 ![image](http://upload-images.jianshu.io/upload_images/954728-b51f82a5a0a4909c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+xhr.png
+
+索引页面数据分析，参看下图
+
+![image](http://upload-images.jianshu.io/upload_images/954728-2129daf129d2bc2d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+data
+
+![image](http://upload-images.jianshu.io/upload_images/954728-669918cdb0f186c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+具体索引链接
+
+经过分析是通过ajax请求，获取回来的数据，其中article_url就是进入详情页面的链接，我们通过构建一个ajax请求，然后获取返回数据，在获取字段
+
+索引页抓取
+
+构建ajax请求获取数据
+
+代码
+
+![image](http://upload-images.jianshu.io/upload_images/954728-1c049286038e71e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+索引页面数据获取
+
+代码分析
+data：是ajax的所需要的参数，这个参数是参看XHR中的
+
+![image](http://upload-images.jianshu.io/upload_images/954728-3d014b0cca5cbdea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+url : baseUrl + 经过转码的参数，成为完整的url【get请求】，其中转码函数urlencode包含在你from urllib import urlencode
+
+请求：本次的请求框架是requests，我一直以为requests是Python的原生库，其实属于第三方框架 ，故安装
+```
+sudo pip install requests
+```
+导入import requests,具体访问参见代码
+
+解析索引页面返回的json数据
+
+根据之前的分析，ajax请求返回值的数据类型是json，故利用Python内部的json模块就可以解析import json
+json 解析完成以后，就可以根据节点取出相应的值，通过遍历数据返回一个首页的索引的ur列表
+
+![image](http://upload-images.jianshu.io/upload_images/954728-d54f52ace91fbc5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+索引数据解析
+
+---
+
+## 详情页面
+
+
+
