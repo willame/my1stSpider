@@ -1,102 +1,35 @@
-# my1stSpider
+## 爬取今日头条街拍图片
 
-# 
-> [Ajax](https://edu.hellobi.com/course/156/play/lesson/2452)[](http://cuiqingcai.com/)
+> 本博客主要记录跟随崔庆才老师的分析Ajax抓取今日头条街拍美图学习的整个过程，更多精品文章，请参阅崔老师的博客，再次感谢崔老师教导。
+3月15日更新，14日代码敲完了，今天主要总结整个过程!
 
-> 31514
+## 啰嗦心得
 
-# 
-* Python
-  * 
-  * ajax
+个人觉得在掌握了Python的基础的前提下，爬虫的难点在于两点：
 
-* js`March 15`
+- 分析网页结构，看要获取的数据获取的方式
+- 利用语言知识去匹配或者利用其它的方法，比如ajax等发起请求获取数据等等
 
-# 
-### 
-* 
-> 
+这两点前者更为复杂，因为有的网页比如本例中，街拍的索引页面的详情页面中，详情的数据是在页面的一个js的变量中，但是在我跟随视频学习的过程中发现，此时的页面很多已经不是存在一个变量中，而是存在于标签中，说明页面是有过改版，此时同一个详情页面就不能一概而论，要写不同的方法处理，不过由于爬虫功底还很薄弱，所以对于存在于标签中的链接，我并没有处理，而是进行了过滤，待到基础比较扎实以后，会对代码进行更新（March 15）
 
-*  
-> 
+## 开始爬取
+### 索引页面
 
-  * HTML
-  * CSS
-  *  js
-  * ajax
+- 前期要求
 
-* 
-  * ajaxGooglefilterXHR
-![xhr.png](http://upload-images.jianshu.io/upload_images/954728-b51f82a5a0a4909c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-  * 
-![data](http://upload-images.jianshu.io/upload_images/954728-2129daf129d2bc2d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/954728-669918cdb0f186c0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-  * ajaxarticle_urlajax
-*  
-  * ajax
-   *  <b>`markdown`
-![](http://upload-images.jianshu.io/upload_images/954728-1c049286038e71e1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-  *  
-    * dataajaxXHR
-![](http://upload-images.jianshu.io/upload_images/954728-3d014b0cca5cbdea.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-    * url : baseUrl + urlgeturlencode`from urllib import urlencode`
-    * requestsrequestsPython `sudo pip install requests  `,`import requests`,
+简单来说此次抓取分围两部分，一部分是图片的索引页面，另外一部分是通过点击索引进入详情页面，抓取具体的图片的地址，并将其存储，最后下载图片资源!
 
-  * json
-    * ajaxjsonPythonjson`import json`
-    * json ur
-![](http://upload-images.jianshu.io/upload_images/954728-d54f52ace91fbc5f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+- 索引页面分析
 
-### 
-* 
->  `var gallery `jsonjson
-![](http://upload-images.jianshu.io/upload_images/954728-eaa0402ae29e9fb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+跟随视频学习，打开谷歌的工具查看索引页面的源代码，没有看到和素材相关的资源，这里略总结一下，以目前自己所学的这点知识，想要的链接信息主要存在于以下三方面的元素中
 
-  * 
-url,
-![](http://upload-images.jianshu.io/upload_images/954728-4b259daed8e106f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-  * 
-`var gallery `json
-![galleryjson](http://upload-images.jianshu.io/upload_images/954728-1d0f13300939276f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-![](http://upload-images.jianshu.io/upload_images/954728-b00141782101c35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-    * HTMLBeautifulSoup BeautifulSouppip`from bs4 import BeautifulSoup`
-   * json
-    * urlurl
- 
-# 
-* mongoDB
-* mongoDB[](http://www.jianshu.com/p/f79b759988d3)
-* pycharmmongoDB
-  * config.py
-![](http://upload-images.jianshu.io/upload_images/954728-441695093f1c791e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-  * `pymongo(import pymongo)``from config import *`
-![](http://upload-images.jianshu.io/upload_images/954728-4885239e18b3a43a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-  *  
-![](http://upload-images.jianshu.io/upload_images/954728-365a654d8a5573bf.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+> 存在于HTML的标签的链接中
+> 存在于CSS样式中
+> 存在于 页面的js代码中
+> 存在于ajax的请求中（索引页面就是这种）
 
-# 
-*  urlPython
-![](http://upload-images.jianshu.io/upload_images/954728-17c7e77c81f2262c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+- 索引页数据分析
 
-* 
-![](http://upload-images.jianshu.io/upload_images/954728-cf415a9e4df65f31.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+通过分析所以页面是通过ajax请求获取到的，通过Google浏览器的工具filter工具的XHR过滤项可以看出
 
-# 
-```
-def main(offset):
-    html = get_page_index(offset, KEYWORD)
-    for url in parse_page_index(html):
-        detail = get_page_detail(url)
-        # 
-        if detail and parse_page_detail(detail, url):
-            result = parse_page_detail(detail, url)
-            if result:
-                save_to_db(result)
-
-if __name__ == "__main__":
-       main()
-```
-[](https://github.com/xqqq0/my1stSpider)
-
-# 
-> 
+![image](http://upload-images.jianshu.io/upload_images/954728-b51f82a5a0a4909c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
