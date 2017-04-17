@@ -81,5 +81,36 @@ json 解析完成以后，就可以根据节点取出相应的值，通过遍历
 
 ## 详情页面
 
+经过分析，在图片的详情页面图片数据是存储在页面的 var gallery变量中，这变量后面也是一个json数据，所以我们经过正则匹配来或者这个变量后边的json数据
+
+![image](http://upload-images.jianshu.io/upload_images/954728-eaa0402ae29e9fb3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+- 详情页面抓取
+
+这个比较简单，根据索引页的url,进行页面获取，与索引页的获取基本相同
+
+![image](http://upload-images.jianshu.io/upload_images/954728-4b259daed8e106f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+- 详情页面解析
+  
+这里要做的工作就是在页面中通过正则匹配找到var gallery，然后获取后面的json数据
+
+![image](http://upload-images.jianshu.io/upload_images/954728-1d0f13300939276f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+gallery后边的json数据结构
+
+![image](http://upload-images.jianshu.io/upload_images/954728-b00141782101c35b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+详情页面解析
+
+由于详情页面就是普通的HTML页面，可以通过BeautifulSoup框架解析， BeautifulSoup框架需要通过pip安装，然后导入
+```
+from bs4 import BeautifulSoup
+```
+将匹配完获取的数据用json框架进行解析，由于图片数据是一个数组，故需要遍历取值
+返回一个数组，包括详情页面的标题，详情页面的url，图片的url数组
+
+---
+
+
+
 
 
